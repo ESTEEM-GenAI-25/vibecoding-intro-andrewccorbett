@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Andrew Corbett | ESTEEM Program</title>
+  <title id="page-title">Andrew Corbett | ESTEEM Program</title>
   <style>
     /* Global styles */
     body {
@@ -17,9 +17,9 @@
 
     /* Notre Dame inspired palette */
     :root {
-      --nd-navy: #0c2340;
-      --nd-gold: #ae9142;
-      --light-bg: #f8f8f8;
+      --nd-navy: var(--primary-color, #0c2340);
+      --nd-gold: var(--secondary-color, #ae9142);
+      --light-bg: var(--background-color, #f8f8f8);
     }
 
     /* Navigation */
@@ -83,8 +83,8 @@
 <body>
   <header>
     <nav>
-      <a href="#" class="logo">Andrew Corbett</a>
-      <ul style="list-style: none; display: flex; margin: 0; padding: 0;">
+      <a href="#" class="logo" id="logo">Andrew Corbett</a>
+      <ul style="list-style: none; display: flex; margin: 0; padding: 0;" id="nav-links">
         <li><a href="#">Home</a></li>
         <li><a href="#">About</a></li>
         <li><a href="#">Experience</a></li>
@@ -96,20 +96,68 @@
   </header>
 
   <main class="hero">
-    <img src="https://via.placeholder.com/150" alt="Andrew Corbett Headshot" class="headshot" />
-    <h1>Hi, I’m Andrew Corbett</h1>
-    <p>Student in the ESTEEM Program at Notre Dame, exploring biotech, entrepreneurship, and innovation.</p>
-    <a href="mailto:acorbet2@nd.edu" class="button">Get in Touch</a>
+    <img id="headshot" src="https://via.placeholder.com/150" alt="Andrew Corbett Headshot" class="headshot" />
+    <h1 id="hero-greeting">Hi, I'm Andrew Corbett</h1>
+    <p id="hero-description">Student in the ESTEEM Program at Notre Dame, exploring biotech, entrepreneurship, and innovation.</p>
+    <a id="hero-button" href="mailto:acorbet2@nd.edu" class="button">Get in Touch</a>
   </main>
 
   <footer>
-    <p>&copy; 2025 Andrew Corbett. All rights reserved. | 
-      <a href="https://www.linkedin.com/in/acorb/" style="color: var(--nd-gold);">LinkedIn</a>
+    <p id="footer-copyright">&copy; 2025 Andrew Corbett. All rights reserved. | 
+      <a id="footer-linkedin" href="https://www.linkedin.com/in/acorb/" style="color: var(--nd-gold);">LinkedIn</a>
     </p>
   </footer>
 
+  <!-- Load configuration -->
+  <script src="config.js"></script>
+  
   <script>
-    // Placeholder for future enhancements
+    // Apply configuration to the page
+    function applyConfig() {
+      const config = window.CONFIG;
+      
+      // Update page title
+      document.getElementById('page-title').textContent = config.site.title;
+      
+      // Update navigation
+      document.getElementById('logo').textContent = config.personal.name;
+      
+      // Update navigation links
+      const navLinks = document.getElementById('nav-links');
+      navLinks.innerHTML = config.navigation.links.map(link => 
+        `<li><a href="${link.href}">${link.text}</a></li>`
+      ).join('');
+      
+      // Update hero section
+      const headshot = document.getElementById('headshot');
+      headshot.src = config.personal.headshot.src;
+      headshot.alt = config.personal.headshot.alt;
+      
+      document.getElementById('hero-greeting').textContent = config.hero.greeting;
+      document.getElementById('hero-description').textContent = config.hero.description;
+      
+      const heroButton = document.getElementById('hero-button');
+      heroButton.textContent = config.hero.button.text;
+      heroButton.href = config.hero.button.href;
+      
+      // Update footer
+      const socialLinks = Object.values(config.footer.social).map(link => 
+        `<a href="${link.href}" style="color: var(--nd-gold);">${link.text}</a>`
+      ).join(' | ');
+      
+      document.getElementById('footer-copyright').innerHTML = 
+        `${config.footer.copyright} | ${socialLinks}`;
+      
+      // Apply color scheme
+      document.documentElement.style.setProperty('--primary-color', config.colors.primary);
+      document.documentElement.style.setProperty('--secondary-color', config.colors.secondary);
+      document.documentElement.style.setProperty('--background-color', config.colors.background);
+      document.documentElement.style.setProperty('--text-color', config.colors.text);
+    }
+    
+    // Apply config when page loads
+    document.addEventListener('DOMContentLoaded', applyConfig);
+    
     console.log("Personal website loaded successfully.");
   </script>
 </body>
